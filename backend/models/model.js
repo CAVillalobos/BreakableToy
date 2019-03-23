@@ -17,24 +17,24 @@ const ContactSchema = mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: false,
-        required: 'Name is required', //Cambiar a Boolean
+        required: true, //Cambiar a Boolean
         validate: [validateName, 'Please fill a Name'], //Verificar validación
-        match: [/^[a-z ,.'-]+$/i, 'Please fill a valid Name']
+        match: [/^[a-z]+$/i, 'Please fill a valid Name']
     },
     lastname: {
         type: String,
         trim: true,
         lowercase: true,
-        required: 'Last Name is required',
+        required: true,
         validate: [validateName, 'Please fill a valid last name'],
-        match: [/^[a-z ,.'-]+$/i, 'Please fill a valid LastName']
+        match: [/^[a-z]+$/i, 'Please fill a valid LastName']
     },
     company: {
         type: String,
         trim: true,
         lowercase: true,
         validate: [validateName, 'Please fill a valid company name'],
-        match: [/^[a-z ,.'-]+$/i, 'Please fill a valid Name company']
+        match: [/^[a-z]+$/i, 'Please fill a valid company company']
     },
     phone: {
         type:Number,
@@ -45,7 +45,7 @@ const ContactSchema = mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        required: 'Email address is required',
+        required: true,
         validate: [validateEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     }
