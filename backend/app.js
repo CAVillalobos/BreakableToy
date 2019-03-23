@@ -12,4 +12,4 @@ app.use(json());
 app.use(router.routes())
     .use(router.allowedMethods())
 
-module.exports = app, router
+module.exports = app
