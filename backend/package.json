@@ -10,6 +10,7 @@
     "koa-json": "^2.0.2",
     "koa-router": "^7.4.0",
     "mongoose": "^5.4.19",
+    "mongoose-paginate-v2": "^1.0.24",
     "nodemon": "^1.18.10",
     "postman": "^0.2.0"
   },

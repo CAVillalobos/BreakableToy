@@ -1,8 +1,13 @@
 const Contact = require('../models/model')
 
 async function getAllContacs(ctx){
-    const contact = await Contact.find({})
-    console.log("Returning all contacts")
+    const {page, name, lastmame} = ctx.query
+    const options = {
+        page: page || 1,
+        limit: 10
+    }
+    const contact = await Contact.paginate({}, options)
+    console.log("Returning contacts")
     ctx.status = 200
     ctx.body = contact
 }
