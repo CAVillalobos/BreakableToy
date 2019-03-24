@@ -21,7 +21,9 @@ async function getAllContacs(ctx){
     }else{
         console.log("No contacts found")
         ctx.status = 404
-        ctx.body = "Error. No contacts found"
+        ctx.body = {
+            error: "Error. No contacts found"
+        }
     }
 }
 
@@ -36,7 +38,9 @@ async function getContact(ctx){
             console.log(contact)
         }else{
             ctx.status = 404
-            ctx.body = "Error. No element was found"
+            ctx.body = {
+                error: "Error. No element was found"
+            }
             console.log("Contact not found")
         }
     }catch (err) {
@@ -55,7 +59,9 @@ async function postContact(ctx){
         console.log("Contact saved")
         ctx.body = saveContact
     }catch (err){
-        ctx.body = "Error. Not a valid contact"
+        ctx.body = {
+            error: "Error. Not a valid contact"
+        }
         ctx.status = err.status || 400
         ctx.app.emit('error', err, ctx)
     }
@@ -71,7 +77,9 @@ async function putContact(ctx){
         ctx.status = 200
         console.log("Contact updated")
     }catch (err){
-        ctx.body = "Error. Not a valid contact"
+        ctx.body = {
+            error: "Error. Not a valid contact"
+        }
         ctx.status = err.status || 400
         ctx.app.emit('error', err, ctx)
     }
@@ -87,7 +95,9 @@ async function deleteContact(ctx){
         ctx.status = 200
         console.log("Contact deleted")
     }catch (err){
-        ctx.body = "Error. Not a valid contact"
+        ctx.body = {
+            error: "Error. Not a valid contact"
+        }
         ctx.status = err.status || 404
         ctx.app.emit('error', err, ctx)
     }
