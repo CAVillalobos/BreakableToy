@@ -1,15 +1,28 @@
 const Contact = require('../models/model')
 
 async function getAllContacs(ctx){
-    const {page, name, lastmame} = ctx.query
+    const {page, name, lastName} = ctx.query
     const options = {
         page: page || 1,
         limit: 10
     }
-    const contact = await Contact.paginate({}, options)
-    console.log("Returning contacts")
-    ctx.status = 200
-    ctx.body = contact
+    const query = {};
+
+    if (name || lastName) {
+        query.$and = [];
+        name && query.$and.push({ name: new RegExp(name, 'i') });
+        lastName && query.$and.push({ lastName: new RegExp(lastName, 'i') });
+    }
+    const contact = await Contact.paginate(query, options)
+    if(contact){
+        console.log("Returning contacts")
+        ctx.status = 200
+        ctx.body = contact
+    }else{
+        console.log("No contacts found")
+        ctx.status = 404
+        ctx.body = "Error. No contacts found"
+    }
 }
 
 async function getContact(ctx){
@@ -22,12 +35,12 @@ async function getContact(ctx){
             ctx.body = contact
             console.log(contact)
         }else{
-            ctx.status = 500
+            ctx.status = 404
             ctx.body = "Error. No element was found"
             console.log("Contact not found")
         }
     }catch (err) {
-        ctx.status = err.status || 500;
+        ctx.status = err.status || 404;
         ctx.app.emit('error', err, ctx);
     }
 }
@@ -43,7 +56,7 @@ async function postContact(ctx){
         ctx.body = saveContact
     }catch (err){
         ctx.body = "Error. Not a valid contact"
-        ctx.status = err.status || 500
+        ctx.status = err.status || 400
         ctx.app.emit('error', err, ctx)
     }
 }
@@ -59,7 +72,7 @@ async function putContact(ctx){
         console.log("Contact updated")
     }catch (err){
         ctx.body = "Error. Not a valid contact"
-        ctx.status = err.status || 500
+        ctx.status = err.status || 400
         ctx.app.emit('error', err, ctx)
     }
 }
@@ -75,7 +88,7 @@ async function deleteContact(ctx){
         console.log("Contact deleted")
     }catch (err){
         ctx.body = "Error. Not a valid contact"
-        ctx.status = err.status || 500
+        ctx.status = err.status || 404
         ctx.app.emit('error', err, ctx)
     }
 }
