@@ -6,10 +6,10 @@ const app = new koa()
 const router= require('./routes/index')
 const json = require("koa-json")
 
+app.use(cors())
 app.use(koaBody())
 app.use(bodyParser())
 app.use(json())
-app.use(cors())
 
 app.use(router.routes())
     .use(router.allowedMethods())

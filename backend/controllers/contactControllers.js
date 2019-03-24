@@ -22,14 +22,14 @@ async function getAllContacs(ctx){
         console.log("No contacts found")
         ctx.status = 404
         ctx.body = {
-            error: "Error. No contacts found"
+            error: "Error. No contacts found",
         }
     }
 }
 
 async function getContact(ctx){
+    const id = ctx.params.contactId
     try{
-        const id = ctx.params.contactId
         console.log(id)
         const contact = await Contact.findById(id) //Manejar errores
         if(contact){
@@ -39,20 +39,19 @@ async function getContact(ctx){
         }else{
             ctx.status = 404
             ctx.body = {
-                error: "Error. No element was found"
+                error: "Error. No element was found",
+                id: id
             }
             console.log("Contact not found")
         }
     }catch (err) {
         ctx.status = err.status || 404;
-        ctx.app.emit('error', err, ctx);
     }
 }
 
 async function postContact(ctx){
+    const contact = new Contact(ctx.request.body) //Verificar mutabilidad
     try{
-        const clientContact = ctx.request.body
-        let contact = new Contact(clientContact) //Verificar mutabilidad
         console.log(contact)
         const saveContact = await contact.save()
         ctx.status = 200
@@ -60,34 +59,36 @@ async function postContact(ctx){
         ctx.body = saveContact
     }catch (err){
         ctx.body = {
-            error: "Error. Not a valid contact"
+            error: "Error. Not a valid contact",
+            contact
         }
         ctx.status = err.status || 400
-        ctx.app.emit('error', err, ctx)
     }
 }
 
 async function putContact(ctx){
+    const id = ctx.params.contactId
+    console.log(id)
     try{
-        const id = ctx.params.contactId
-        console.log(id)
         //Buscar y actualizar. Enviar ID y elementos a modificar contenidos en ctx.request.body
         const contact = await Contact.findByIdAndUpdate(id, ctx.request.body) //Método reemplazado
         ctx.body = contact
         ctx.status = 200
         console.log("Contact updated")
     }catch (err){
+        const clientContact = ctx.request.body
         ctx.body = {
-            error: "Error. Not a valid contact"
+            error: "Error. Not a valid contact",
+            id: id,
+            clientContact
         }
         ctx.status = err.status || 400
-        ctx.app.emit('error', err, ctx)
     }
 }
 
 async function deleteContact(ctx){
+    const id = ctx.params.contactId
     try{
-        const id = ctx.params.contactId
         console.log(id)
         const contact = await Contact.findById(id)
         const deletedContact = await contact.remove() //Puede funcionar con FindByIdAndRemove
@@ -96,10 +97,12 @@ async function deleteContact(ctx){
         console.log("Contact deleted")
     }catch (err){
         ctx.body = {
-            error: "Error. Not a valid contact"
+            error: "Error. Not a valid contact",
+            doc: {
+                id: id
+            }
         }
         ctx.status = err.status || 404
-        ctx.app.emit('error', err, ctx)
     }
 }
 

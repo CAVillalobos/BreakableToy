@@ -34,11 +34,12 @@ const ContactSchema = mongoose.Schema({
         type: String,
         trim: true,
         lowercase: true,
+        sparse: true,
         validate: [validateName, 'Please fill a valid company name'],
         match: [/^[a-z]+$/i, 'Please fill a valid company company']
     },
     phone: {
-        type:Number,
+        type: Number,
         unique: true,
         sparse: true
     },
