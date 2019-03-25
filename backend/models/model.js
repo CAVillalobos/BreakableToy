@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
-const validateEmail = function(email) {
+const validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 };
 
-const validateName = function(name) {
+const validateName = function (name) {
     var re = /^[a-z]+$/i;
     return re.test(name)
 };
@@ -54,4 +54,4 @@ const ContactSchema = mongoose.Schema({
     }
 })
 ContactSchema.plugin(mongoosePaginate)
-module.exports= mongoose.model('contact', ContactSchema)
+module.exports = mongoose.model('contact', ContactSchema)

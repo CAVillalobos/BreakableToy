@@ -36,6 +36,7 @@ class ContactPut extends React.Component {
                 phone: this.props.contact.phone,
                 company: this.props.contact.company
             })
+            console.log(this.state)
         }
     }
     componentWillMount() {
@@ -84,9 +85,30 @@ class ContactPut extends React.Component {
                     },
                     body: JSON.stringify(putData)
                 })
-                    .then(res => res.json())
+                    .then(res => {
+                        return res.json().then(json => {
+                            console.log(json)
+                            if (res.status === 400 || res.status === 404) {
+                                notification.error({
+                                    message: "Error",
+                                    description: json.msg || "Not a valid contact"
+                                })
+                            } else if (res.status === 406) {
+                                notification.error({
+                                    message: "Error",
+                                    description: "Name or Lastname not valid."
+                                })
+                            } else if (res.status === 200) {
+                                notification.success({
+                                    message: "Success",
+                                    description: "Contact saved"
+                                })
+                                this.props.reRender()
+                            }
+                        })
+                    })
                     .then(data => {
-                        console.log(data)
+                        //console.log(data)
                     })
             } else {
                 notification.error({
@@ -189,7 +211,7 @@ class ContactPut extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item {...tailFormItemLayout}>
-                        <Button type="primary" htmlType="submit">Register</Button>
+                        <Button type="primary" htmlType="submit">Update</Button>
                     </Form.Item>
                 </Form>
             </div >

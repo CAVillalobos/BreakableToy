@@ -22,11 +22,11 @@ class ContactPost extends React.Component {
                     phone: values.phone,
                     email: values.email
                 }
-        
+
                 if (postData.company === '') {
                     postData.company = null
                 }
-        
+
                 fetch(`http://localhost:3001/api/contacts`, {
                     method: 'POST',
                     headers: {
@@ -34,11 +34,25 @@ class ContactPost extends React.Component {
                     },
                     body: JSON.stringify(postData)
                 })
-                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res)
+                        if (res.status === 400 || res.status === 404) {
+                            notification.error({
+                                message: "Error",
+                                description: res.msg
+                            })
+                        } else if (res.status === 200) {
+                            notification.success({
+                                message: "Success",
+                                description: "Contact saved"
+                            })
+                            this.props.reRender()
+                        }
+                    })
                     .then(data => {
                         console.log(data)
                     })
-            }else{
+            } else {
                 notification.error({
                     message: "Error",
                     description: "Unable to save contact"

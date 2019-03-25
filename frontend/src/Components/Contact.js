@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Table, Divider, notification, Button } from 'antd';
+import { Table, Button } from 'antd';
 import ContactPost from './ContactPost'
 import ContactPut from './ContactPut'
-const { Column, ColumnGroup } = Table;
 
 class Contact extends Component {
     constructor(props) {
@@ -37,7 +36,8 @@ class Contact extends Component {
     }
 
     onContactCheck(contact) {
-        this.setState({ selectedContact: contact, showEditForm: true, showContactForm: false })
+        console.log("Contact: " + contact + "\nSelected contact: " + this.state.selectedContact)
+        this.setState({ selectedContact: contact, showEditForm: !this.state.showEditForm, showContactForm: false })
     }
 
     onContactRemove(contact) {
@@ -51,6 +51,7 @@ class Contact extends Component {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
+                this.fetchContacts()
             })
     }
 
@@ -58,8 +59,8 @@ class Contact extends Component {
         this.fetchContacts(this.state.page)
     }
 
-    showForm(){
-        this.setState({showContactForm: !this.state.showContactForm, showEditForm: false})
+    showForm() {
+        this.setState({ showContactForm: !this.state.showContactForm, showEditForm: false })
     }
 
     fetchContacts(page) {
@@ -71,7 +72,9 @@ class Contact extends Component {
                     page: data.page,
                     pages: data.totalPages,
                     contacts: data.docs,
-                    totalDocs: data.totalDocs
+                    totalDocs: data.totalDocs,
+                    showEditForm: false,
+                    showContactForm: false
                 })
             })
     }
@@ -89,7 +92,7 @@ class Contact extends Component {
                     pagination={{ current: this.state.page, total: this.state.totalDocs, onChange: this.onPageChange.bind(this) }}
                     bordered />
                 <Button type="primary" onClick={this.showForm.bind(this)}>Add new contact</Button>
-                {this.state.showEditForm && <ContactPut contact={this.state.selectedContact} reRender={this.fetchContacts.bind(this)}/>}
+                {this.state.showEditForm && <ContactPut contact={this.state.selectedContact} reRender={this.fetchContacts.bind(this)} />}
                 {this.state.showContactForm && <ContactPost reRender={this.fetchContacts.bind(this)} />}
             </div>
         )
