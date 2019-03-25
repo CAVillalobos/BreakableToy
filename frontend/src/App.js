@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import 'antd/dist/antd.css'
+import './App.css'
 import './Components/Contact'
-import './Components/ContactForm'
-import Contact from './Components/Contact';
-import ContactForm from './Components/ContactForm';
+import './Components/ContactPost'
+import Contact from './Components/Contact'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <ContactForm />
-        <hr />
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo"/>
+          Contacts
+        </header>
         <Contact />
       </div>
     );
